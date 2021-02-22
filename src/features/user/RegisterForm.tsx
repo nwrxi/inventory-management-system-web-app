@@ -1,6 +1,6 @@
-import { Form, Field, Formik, ErrorMessage } from "formik";
+import { Form, Field, Formik } from "formik";
 import React, { CSSProperties, Fragment, useContext } from "react";
-import { Alert, Button, Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import * as Yup from "yup";
 import { LinkContainer } from "react-router-bootstrap";
 import { BaseStoreContext } from "../../stores/BaseStore";
@@ -22,21 +22,25 @@ const labelStyle: CSSProperties = {
   float: "left",
 };
 
-export default observer(function LoginForm() {
+export default observer(function RegisterForm() {
   const baseStore = useContext(BaseStoreContext);
-  const { login } = baseStore.userStore;
+  const { register } = baseStore.userStore;
 
   return (
     <Formik
       initialValues={{
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         error: null,
       }}
       onSubmit={(values, { setErrors }) =>
-        login(values).catch((error) => setErrors({ error }))
+        // login(values).catch((error) => setErrors({ error }))
       }
       validationSchema={Yup.object({
+        firstName: Yup.string().required("First name is required"),
+        lastName: Yup.string().required("Last name is required"),
         email: Yup.string()
           .email("Email not valid")
           .required("Email is required"),
@@ -48,8 +52,40 @@ export default observer(function LoginForm() {
           <div className="container">
             <div className="login-wrapper" style={loginPageStyle}>
               <h2>Inventory Management System</h2>
-              <h3>Login Page</h3>
-              <Form className="form-container" onSubmit={handleSubmit}>
+              <h3>Register Page</h3>
+              <Form className="form-container">
+                <div className="form-group">
+                  <label style={labelStyle} htmlFor="firstName">
+                    First name
+                  </label>
+                  <Field
+                    type="text"
+                    name="firstName"
+                    className={"form-control"}
+                    placeholder="First Name"
+                  />
+                  {touched.firstName && errors.firstName && (
+                    <span className="help-block text-danger">
+                      {errors.firstName}
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label style={labelStyle} htmlFor="lastName">
+                    Last name
+                  </label>
+                  <Field
+                    type="text"
+                    name="lastName"
+                    className={"form-control"}
+                    placeholder="Last Name"
+                  />
+                  {touched.lastName && errors.lastName && (
+                    <span className="help-block text-danger">
+                      {errors.lastName}
+                    </span>
+                  )}
+                </div>
                 <div className="form-group">
                   <label style={labelStyle} htmlFor="email">
                     Email
@@ -82,16 +118,13 @@ export default observer(function LoginForm() {
                     </span>
                   )}
                 </div>
-                {errors.error && (
-                  <Alert variant="danger">Wrong login or password</Alert>
-                )}
                 {!isSubmitting && (
                   <Button
                     disabled={!dirty || !isValid}
                     variant="primary"
                     type="submit"
                   >
-                    Login
+                    Register
                   </Button>
                 )}
                 {isSubmitting && (
@@ -103,12 +136,12 @@ export default observer(function LoginForm() {
                       role="status"
                       aria-hidden="true"
                     />
-                    Login
+                    Register
                   </Button>
                 )}
-                <LinkContainer to="/register">
+                <LinkContainer to="/login">
                   <Button className="ml-2" variant="danger">
-                    Create account
+                    Go back to login
                   </Button>
                 </LinkContainer>
               </Form>

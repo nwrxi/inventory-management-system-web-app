@@ -5,11 +5,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./layout/styles.css";
 import App from "./layout/App";
 import reportWebVitals from "./reportWebVitals";
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import ScrollToTop from "./layout/util/ScrollToTop";
+
+export const history = createBrowserHistory();
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Router history={history}>
+    <ScrollToTop />
     <App />
-  </React.StrictMode>,
+  </Router>,
   document.getElementById("root")
 );
 
