@@ -12,16 +12,26 @@ import { Container } from "react-bootstrap";
 import RegisterForm from "../features/user/RegisterForm";
 import InventoryPage from "../features/user/Inventory/InventoryPage";
 import { BaseStoreContext } from "../stores/BaseStore";
+import NavBar from "./navigation/NavBar";
+import Loading from "./Loading";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
   const { getUser, user } = baseStore.userStore;
+  const { setLoading, loading } = baseStore.commonStore;
 
   useEffect(() => {
+    setLoading(true);
     if (window.localStorage.getItem("token")) {
-      getUser();
+      getUser().finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-  }, [getUser]);
+  }, [getUser, setLoading]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!user) {
     return (
@@ -54,7 +64,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
         path={"/(.+)"}
         render={() => (
           <Fragment>
-            {/* <NavBar /> */}
+            <NavBar />
             <Container style={{ marginTop: "7em" }}>
               {/* Only one route can be displayed at once in Switch component */}
               <Switch>
