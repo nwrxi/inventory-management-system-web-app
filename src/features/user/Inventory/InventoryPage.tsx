@@ -1,7 +1,10 @@
-import React from "react";
+import { observer } from "mobx-react-lite";
+import React, { Fragment, useContext } from "react";
+import { BaseStoreContext } from "../../../stores/BaseStore";
 
-const InventoryPage = () => {
-  return <div>Inventory Page</div>;
-};
+export default observer(function InventoryPage() {
+  const baseStore = useContext(BaseStoreContext);
+  const { user } = baseStore.userStore;
 
-export default InventoryPage;
+  return <Fragment>{user?.email}</Fragment>;
+});

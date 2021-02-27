@@ -1,16 +1,17 @@
 import { Form, Field, Formik } from "formik";
 import React, { CSSProperties, Fragment, useContext } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Alert, Button, Spinner } from "react-bootstrap";
 import * as Yup from "yup";
 import { LinkContainer } from "react-router-bootstrap";
 import { BaseStoreContext } from "../../stores/BaseStore";
 import { observer } from "mobx-react-lite";
+import { AxiosResponse } from "axios";
 
 const loginPageStyle: CSSProperties = {
   position: "absolute",
   left: "50%",
   top: "50%",
-  transform: "translate(-50%, -80%)",
+  transform: "translate(-50%, -60%)",
   maxWidth: "530px",
   background: "#fff",
   padding: "30px",
@@ -22,6 +23,12 @@ const labelStyle: CSSProperties = {
   float: "left",
 };
 
+export type FormikErrors<Values> = {
+  [K in keyof Values]?: Values[K] extends object
+    ? FormikErrors<Values[K]>
+    : AxiosResponse;
+};
+
 export default observer(function RegisterForm() {
   const baseStore = useContext(BaseStoreContext);
   const { register } = baseStore.userStore;
@@ -29,31 +36,86 @@ export default observer(function RegisterForm() {
   return (
     <Formik
       initialValues={{
+        userName: "",
         firstName: "",
         lastName: "",
         email: "",
         password: "",
         error: null,
       }}
-      onSubmit={(values, { setErrors }) =>
-        // login(values).catch((error) => setErrors({ error }))
-      }
+      onSubmit={(values, { setStatus, setErrors, setSubmitting }) => {
+        register(values).catch((error) => {
+          console.log(error.response.data.email);
+          if ("errors" in error.response.data) {
+            setStatus({
+              password: error.response.data.errors.Password,
+            });
+          }
+          if ("email" in error.response.data) {
+            setStatus({
+              email: error.response.data.email,
+            });
+          }
+
+          setSubmitting(false);
+        });
+      }}
       validationSchema={Yup.object({
+        userName: Yup.string().required("Username is required"),
         firstName: Yup.string().required("First name is required"),
         lastName: Yup.string().required("Last name is required"),
         email: Yup.string()
           .email("Email not valid")
           .required("Email is required"),
-        password: Yup.string().required("Password is required"),
+        password: Yup.string()
+          .matches(
+            /[A-Z]/,
+            "Password must contain at least 1 uppercase character."
+          )
+          .matches(
+            /[a-z]/,
+            "Password must contain at least 1 lowercase character."
+          )
+          .matches(/[0-9]/, "Password must contain at least 1 number.")
+          .matches(
+            /[^a-zA-Z0-9]/,
+            "Password must contain at least 1 non alphanumeric character."
+          )
+          .matches(/^(.{6,99})$/, "Password must be have at least 6 characters")
+          .required("Password is required"),
       })}
     >
-      {({ handleSubmit, touched, isSubmitting, errors, isValid, dirty }) => (
+      {({
+        handleSubmit,
+        touched,
+        isSubmitting,
+        errors,
+        isValid,
+        dirty,
+        status,
+      }) => (
         <Fragment>
           <div className="container">
             <div className="login-wrapper" style={loginPageStyle}>
               <h2>Inventory Management System</h2>
               <h3>Register Page</h3>
               <Form className="form-container">
+                <div className="form-group">
+                  <label style={labelStyle} htmlFor="userName">
+                    Username
+                  </label>
+                  <Field
+                    type="text"
+                    name="userName"
+                    className={"form-control"}
+                    placeholder="Username"
+                  />
+                  {touched.userName && errors.userName && (
+                    <span className="help-block text-danger">
+                      {errors.userName}
+                    </span>
+                  )}
+                </div>
                 <div className="form-group">
                   <label style={labelStyle} htmlFor="firstName">
                     First name
@@ -118,6 +180,12 @@ export default observer(function RegisterForm() {
                     </span>
                   )}
                 </div>
+                {status && status.email && (
+                  <Alert variant="danger">{status.email}</Alert>
+                )}
+                {status && status.password && (
+                  <Alert variant="danger">{status.password}</Alert>
+                )}
                 {!isSubmitting && (
                   <Button
                     disabled={!dirty || !isValid}
