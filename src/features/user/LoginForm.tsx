@@ -48,7 +48,15 @@ export default observer(function LoginForm() {
           <div className="container">
             <div className="login-wrapper" style={loginPageStyle}>
               <h2>Inventory Management System</h2>
-              <h3>Login Page</h3>
+              <h3
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                Login Page
+              </h3>
               <Form className="form-container" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label style={labelStyle} htmlFor="email">

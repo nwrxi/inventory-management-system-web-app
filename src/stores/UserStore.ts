@@ -50,4 +50,10 @@ export default class UserStore {
       console.log(error);
     }
   };
+
+  logout = () => {
+    this.user = null;
+    window.localStorage.removeItem("token");
+    history.push("/login");
+  };
 }
