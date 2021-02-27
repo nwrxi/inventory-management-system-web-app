@@ -29,6 +29,12 @@ const User = {
     axios
       .post(`account/login`, user)
       .then((response: AxiosResponse) => response.data),
+  register: (user: IUserFormValues): Promise<IUser> =>
+    axios
+      .post(`account/register`, user)
+      .then((response: AxiosResponse) => response.data),
+  currentUser: (): Promise<IUser> =>
+    axios.get(`account/`).then((response: AxiosResponse) => response.data),
 };
 
 export default User;
