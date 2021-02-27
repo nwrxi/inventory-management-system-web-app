@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { IUser, IUserFormValues } from "../models/User";
 
-axios.defaults.baseURL = "http://localhost:58230/api";
+axios.defaults.baseURL = "http://localhost:5000/api";
 
 axios.interceptors.request.use(
   (config) => {
@@ -34,7 +34,10 @@ const User = {
       .post(`account/register`, user)
       .then((response: AxiosResponse) => response.data),
   currentUser: (): Promise<IUser> =>
-    axios.get(`account/`).then((response: AxiosResponse) => response.data),
+    axios
+      .get(`account/`)
+      .then(sleep(1000))
+      .then((response: AxiosResponse) => response.data),
 };
 
 export default User;
