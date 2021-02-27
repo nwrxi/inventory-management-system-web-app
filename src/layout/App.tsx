@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import "./App.css";
 import LoginForm from "../features/user/LoginForm";
 import {
@@ -10,16 +10,45 @@ import {
 import { observer } from "mobx-react-lite";
 import { Container } from "react-bootstrap";
 import RegisterForm from "../features/user/RegisterForm";
+import InventoryPage from "../features/user/Inventory/InventoryPage";
+import { BaseStoreContext } from "../stores/BaseStore";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
-  return (
-    // <div className="App">
-    //   <LoginForm />
-    // </div>
+  const baseStore = useContext(BaseStoreContext);
+  const { getUser, user } = baseStore.userStore;
 
+  useEffect(() => {
+    if (window.localStorage.getItem("token")) {
+      getUser();
+    }
+  }, [getUser]);
+
+  if (!user) {
+    return (
+      <Fragment>
+        <Route exact path="/" component={LoginForm} />
+        <Route
+          path={"/(.+)"}
+          render={() => (
+            <Fragment>
+              <Container style={{ marginTop: "7em" }}>
+                <Switch>
+                  <Route path="/login" component={LoginForm} />
+                  <Route path="/register" component={RegisterForm} />
+                  <Route component={LoginForm} />
+                </Switch>
+              </Container>
+            </Fragment>
+          )}
+        />
+      </Fragment>
+    );
+  }
+
+  return (
     <Fragment>
       {/* TODO: if user is logged then homepage if not then login page */}
-      {/* <Route exact path="/" component={HomePage} /> */}
+      <Route exact path="/" component={LoginForm} />
       {/* When we hit route with / and anything else this route will match */}
       <Route
         path={"/(.+)"}
@@ -32,7 +61,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 {/* <ActivityDashboard /> */}
                 {/* Without exact when we go to /activities for react
          both www.something.com/ and .com/activities match so bot will be rendered */}
-                {/* <Route exact path="/activities" component={ActivityDashboard} /> */}
+                <Route exact path="/inventory" component={InventoryPage} />
                 {/* :id is a route parameter */}
                 {/* <Route path="/activities/:id" component={ActivityDetails} /> */}
                 {/* <Route
