@@ -9,6 +9,7 @@ export interface IUser {
 export interface IUserFormValues {
   email: string;
   password: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
 }
