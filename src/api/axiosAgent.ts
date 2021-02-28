@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { IItem } from "../models/Item";
 import { IUser, IUserFormValues } from "../models/User";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
@@ -24,20 +25,27 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
     setTimeout(() => resolve(response), ms)
   );
 
-const User = {
-  login: (user: IUserFormValues): Promise<IUser> =>
-    axios
-      .post(`account/login`, user)
-      .then((response: AxiosResponse) => response.data),
-  register: (user: IUserFormValues): Promise<IUser> =>
-    axios
-      .post(`account/register`, user)
-      .then((response: AxiosResponse) => response.data),
-  currentUser: (): Promise<IUser> =>
-    axios
-      .get(`account/`)
-      .then(sleep(1000))
-      .then((response: AxiosResponse) => response.data),
+const axiosAgent = {
+  User: {
+    login: (user: IUserFormValues): Promise<IUser> =>
+      axios
+        .post(`account/login`, user)
+        .then((response: AxiosResponse) => response.data),
+    register: (user: IUserFormValues): Promise<IUser> =>
+      axios
+        .post(`account/register`, user)
+        .then((response: AxiosResponse) => response.data),
+    currentUser: (): Promise<IUser> =>
+      axios
+        .get(`account/`)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
+  },
+
+  Item: {
+    getItems: (): Promise<IItem[]> =>
+      axios.get(`items`).then((response: AxiosResponse) => response.data),
+  },
 };
 
-export default User;
+export default axiosAgent;

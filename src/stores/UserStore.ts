@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { createContext } from "react";
 import { history } from "..";
 import axiosAgent from "../api/axiosAgent";
 import { IUser, IUserFormValues } from "../models/User";
@@ -16,7 +15,7 @@ export default class UserStore {
 
   login = async (userToLogin: IUserFormValues) => {
     try {
-      const user = await axiosAgent.login(userToLogin);
+      const user = await axiosAgent.User.login(userToLogin);
       if (user) {
         runInAction(() => (this.user = user));
         window.localStorage.setItem("token", user.token);
@@ -29,7 +28,7 @@ export default class UserStore {
 
   register = async (userToRegister: IUserFormValues) => {
     try {
-      const user = await axiosAgent.register(userToRegister);
+      const user = await axiosAgent.User.register(userToRegister);
       if (user) {
         runInAction(() => (this.user = user));
         window.localStorage.setItem("token", user.token);
@@ -42,7 +41,7 @@ export default class UserStore {
 
   getUser = async () => {
     try {
-      const user = await axiosAgent.currentUser();
+      const user = await axiosAgent.User.currentUser();
       runInAction(() => {
         this.user = user;
       });

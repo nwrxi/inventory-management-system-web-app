@@ -13,3 +13,9 @@ export interface IUserFormValues {
   firstName?: string;
   lastName?: string;
 }
+
+export interface IUserItem {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
