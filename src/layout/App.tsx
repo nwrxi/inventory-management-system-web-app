@@ -14,6 +14,8 @@ import InventoryPage from "../features/user/Inventory/InventoryPage";
 import { BaseStoreContext } from "../stores/BaseStore";
 import NavBar from "./navigation/NavBar";
 import Loading from "./Loading";
+import AddItemModal from "../features/items/AddItemModal";
+import { isMobile } from "react-device-detect";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
@@ -28,6 +30,11 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
       setLoading(false);
     }
   }, [getUser, setLoading]);
+
+  //TODO: make something better
+  if(isMobile){
+      return <Fragment>Use our app to use our website on mobile</Fragment>
+  }
 
   if (loading) {
     return <Loading />;
@@ -57,7 +64,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
 
   return (
     <Fragment>
-      {/* TODO: if user is logged then homepage if not then login page */}
+        <AddItemModal/>
       <Route exact path="/" component={LoginForm} />
       {/* When we hit route with / and anything else this route will match */}
       <Route
