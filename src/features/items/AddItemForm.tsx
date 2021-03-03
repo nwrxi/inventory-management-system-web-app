@@ -1,12 +1,13 @@
-import { Form, Field, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import React, { CSSProperties, Fragment, useContext } from "react";
 import { Alert, Button, Spinner } from "react-bootstrap";
 import * as Yup from "yup";
 import { LinkContainer } from "react-router-bootstrap";
 import { BaseStoreContext } from "../../stores/BaseStore";
 import { observer } from "mobx-react-lite";
+import {isMobile} from "react-device-detect";
 
-const loginPageStyle: CSSProperties = {
+let loginPageStyle: CSSProperties = {
   position: "absolute",
   left: "50%",
   top: "50%",
@@ -18,75 +19,89 @@ const loginPageStyle: CSSProperties = {
   boxShadow: "0px 0px 10px 10px rgba(0,0,0,0.15)",
 };
 
+if(isMobile){
+    loginPageStyle = {
+        maxWidth: "530px",
+        background: "#ffffff",
+        padding: "30px",
+        borderRadius: "10px",
+        boxShadow: "0px 0px 10px 10px rgba(0,0,0,0.15)",
+    };
+}
+
 const labelStyle: CSSProperties = {
   float: "left",
 };
 
-export default observer(function LoginForm() {
+export default observer(function AddItemForm() {
   const baseStore = useContext(BaseStoreContext);
-  const { login } = baseStore.userStore;
+  const { setShow } = baseStore.modalStore;
 
   return (
     <Formik
       initialValues={{
-        email: "",
-        password: "",
+        name: "",
+        barcode: "",
         error: null,
       }}
-      onSubmit={(values, { setErrors }) =>
-        login(values).catch((error) => setErrors({ error }))
-      }
+      onSubmit={(values, { setErrors }) => console.log(values)}
       validationSchema={Yup.object({
-        email: Yup.string()
-          .email("Email not valid")
-          .required("Email is required"),
-        password: Yup.string().required("Password is required"),
+        name: Yup.string().required("Item name is required"),
+        barcode: Yup.number().required("Barcode is required"),
       })}
     >
-      {({ handleSubmit, touched, isSubmitting, errors, isValid, dirty }) => (
+      {({
+        setFieldValue,
+        handleSubmit,
+        touched,
+        isSubmitting,
+        errors,
+        isValid,
+        dirty,
+      }) => (
         <Fragment>
           <div className="container">
             <div className="login-wrapper" style={loginPageStyle}>
-              <h2>Inventory Management System</h2>
-              <h3
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                Login Page
-              </h3>
+              <h2>Add new item</h2>
               <Form className="form-container" onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label style={labelStyle} htmlFor="email">
-                    Email
+                  <label style={labelStyle} htmlFor="name">
+                    Item name
                   </label>
                   <Field
                     type="text"
-                    name="email"
+                    name="name"
                     className={"form-control"}
-                    placeholder="Email"
+                    placeholder="Item name"
                   />
-                  {touched.email && errors.email && (
+                  {touched.name && errors.name && (
                     <span className="help-block text-danger">
-                      {errors.email}
+                      {errors.name}
                     </span>
                   )}
                 </div>
                 <div className="form-group">
-                  <label style={labelStyle} htmlFor="password">
-                    Password
+                  <label style={labelStyle} htmlFor="barcode">
+                    Barcode
                   </label>
                   <Field
-                    type="password"
-                    name="password"
+                    type="text"
+                    name="barcode"
+                    pattern="\d*"
+                    onChange={(e: any) => {
+                      e.preventDefault();
+                      const { value } = e.target;
+                      const regex = /^[0-9]*$/;
+                      if (regex.test(value.toString())) {
+                        setFieldValue("barcode", value);
+                      }
+                    }}
                     className={"form-control"}
-                    placeholder="Password"
+                    placeholder="Barcode"
                   />
-                  {touched.password && errors.password && (
+                  {touched.barcode && errors.barcode && (
                     <span className="help-block text-danger">
-                      {errors.password}
+                      {errors.barcode}
                     </span>
                   )}
                 </div>
@@ -111,14 +126,16 @@ export default observer(function LoginForm() {
                       role="status"
                       aria-hidden="true"
                     />
-                    Login
+                    Submit
                   </Button>
                 )}
-                <LinkContainer to="/register">
-                  <Button className="ml-2" variant="danger">
-                    Create account
-                  </Button>
-                </LinkContainer>
+                <Button
+                  onClick={() => setShow(false)}
+                  className="ml-2"
+                  variant="danger"
+                >
+                  Cancel
+                </Button>
               </Form>
             </div>
           </div>
