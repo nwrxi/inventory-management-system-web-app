@@ -11,14 +11,19 @@ export default class ItemStore {
   }
 
   itemsMap = new Map();
+  itemsLoading: boolean = true;
+
+  setItemsLoading = (loading: boolean) => {
+    this.itemsLoading = loading;
+  };
 
   getItems = async () => {
     try {
       const items = await axiosAgent.Item.getItems();
       runInAction(() => {
         items.forEach((item) => {
-          //convert date
           item.dateAdded = new Date(item.dateAdded);
+          item.addedBy = item.user.firstName + " " + item.user.lastName;
           this.itemsMap.set(item.id, item);
         });
       });

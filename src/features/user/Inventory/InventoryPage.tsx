@@ -1,18 +1,16 @@
 import { observer } from "mobx-react-lite";
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { BaseStoreContext } from "../../../stores/BaseStore";
+import InventoryTable from "./InventoryTable";
 
 export default observer(function InventoryPage() {
   const baseStore = useContext(BaseStoreContext);
-  const { setLoading } = baseStore.commonStore;
-  const { user } = baseStore.userStore;
-  const { getItems, itemsMap } = baseStore.itemStore;
+  const { getItems, setItemsLoading } = baseStore.itemStore;
 
   useEffect(() => {
-    setLoading(true);
-    getItems();
-    setLoading(false);
-  }, [getItems, setLoading]);
+    setItemsLoading(true);
+    getItems().finally(() => setItemsLoading(false));
+  }, [getItems, setItemsLoading]);
 
-  return <Fragment>{user?.email}</Fragment>;
+  return <InventoryTable />;
 });

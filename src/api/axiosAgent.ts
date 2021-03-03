@@ -44,7 +44,10 @@ const axiosAgent = {
 
   Item: {
     getItems: (): Promise<IItem[]> =>
-      axios.get(`items`).then((response: AxiosResponse) => response.data),
+      axios
+        .get(`items`)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
   },
 };
 
