@@ -11,6 +11,6 @@ export interface IItem {
 
 export interface IFormItem {
   name: string;
-  dateAdded: Date;
+  dateAdded: string;
   barcode: string;
 }

@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import axiosAgent from "../api/axiosAgent";
 import { BaseStore } from "./BaseStore";
+import { IFormItem } from "../models/Item";
 
 export default class ItemStore {
   baseStore: BaseStore;
@@ -30,6 +31,20 @@ export default class ItemStore {
     } catch (error) {
       this.baseStore.commonStore.setLoading(false);
       console.log(error);
+    }
+  };
+
+  addItem = async (item: IFormItem) => {
+    try {
+      const addedItem = await axiosAgent.Item.addItem(item);
+      runInAction(() => {
+        addedItem.dateAdded = new Date(item.dateAdded);
+        addedItem.addedBy =
+          addedItem.user.firstName + " " + addedItem.user.lastName;
+        this.itemsMap.set(addedItem.id, addedItem);
+      });
+    } catch (error) {
+      throw error;
     }
   };
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IItem } from "../models/Item";
+import { IFormItem, IItem } from "../models/Item";
 import { IUser, IUserFormValues } from "../models/User";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
@@ -46,6 +46,10 @@ const axiosAgent = {
     getItems: (): Promise<IItem[]> =>
       axios
         .get(`items`)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
+    addItem: (item: IFormItem): Promise<IItem> => axios
+        .post(`items`, item)
         .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
   },

@@ -5,7 +5,8 @@ import * as Yup from "yup";
 import { LinkContainer } from "react-router-bootstrap";
 import { BaseStoreContext } from "../../stores/BaseStore";
 import { observer } from "mobx-react-lite";
-import {isMobile} from "react-device-detect";
+import { isMobile } from "react-device-detect";
+import { AxiosResponse } from "axios";
 
 let loginPageStyle: CSSProperties = {
   position: "absolute",
@@ -19,14 +20,14 @@ let loginPageStyle: CSSProperties = {
   boxShadow: "0px 0px 10px 10px rgba(0,0,0,0.15)",
 };
 
-if(isMobile){
-    loginPageStyle = {
-        maxWidth: "530px",
-        background: "#ffffff",
-        padding: "30px",
-        borderRadius: "10px",
-        boxShadow: "0px 0px 10px 10px rgba(0,0,0,0.15)",
-    };
+if (isMobile) {
+  loginPageStyle = {
+    maxWidth: "530px",
+    background: "#ffffff",
+    padding: "30px",
+    borderRadius: "10px",
+    boxShadow: "0px 0px 10px 10px rgba(0,0,0,0.15)",
+  };
 }
 
 const labelStyle: CSSProperties = {
@@ -36,15 +37,34 @@ const labelStyle: CSSProperties = {
 export default observer(function AddItemForm() {
   const baseStore = useContext(BaseStoreContext);
   const { setShow } = baseStore.modalStore;
+  const { addItem } = baseStore.itemStore;
 
   return (
     <Formik
       initialValues={{
         name: "",
         barcode: "",
+        dateAdded: new Date().toJSON(),
         error: null,
       }}
-      onSubmit={(values, { setErrors }) => console.log(values)}
+      onSubmit={(values, { setStatus, setErrors, setSubmitting }) => {
+        addItem(values)
+          .then(() => setShow(false))
+          .catch((error) => {
+            console.log(error.response.data);
+            if ("Barcode" in error.response.data.errors) {
+              setStatus({
+                barcode: error.response.data.errors.Barcode,
+              });
+            }
+            if ("Barcode" in error.response.data) {
+              setStatus({
+                barcode: error.response.data.Barcode,
+              });
+            }
+            setSubmitting(false);
+          });
+      }}
       validationSchema={Yup.object({
         name: Yup.string().required("Item name is required"),
         barcode: Yup.number().required("Barcode is required"),
@@ -58,6 +78,7 @@ export default observer(function AddItemForm() {
         errors,
         isValid,
         dirty,
+        status,
       }) => (
         <Fragment>
           <div className="container">
@@ -105,8 +126,8 @@ export default observer(function AddItemForm() {
                     </span>
                   )}
                 </div>
-                {errors.error && (
-                  <Alert variant="danger">Wrong login or password</Alert>
+                {status && status.barcode && (
+                  <Alert variant="danger">{status.barcode}</Alert>
                 )}
                 {!isSubmitting && (
                   <Button
@@ -114,7 +135,7 @@ export default observer(function AddItemForm() {
                     variant="primary"
                     type="submit"
                   >
-                    Login
+                    Add
                   </Button>
                 )}
                 {isSubmitting && (
