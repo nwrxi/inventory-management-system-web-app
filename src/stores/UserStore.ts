@@ -39,7 +39,7 @@ export default class UserStore {
     }
   };
 
-  getUser = async () => {
+  getCurrentUser = async () => {
     try {
       const user = await axiosAgent.User.currentUser();
       runInAction(() => {

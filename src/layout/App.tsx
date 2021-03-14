@@ -16,24 +16,25 @@ import NavBar from "./navigation/NavBar";
 import Loading from "./Loading";
 import AddItemModal from "../features/items/AddItemModal";
 import { isMobile } from "react-device-detect";
+import AccountPage from "../features/user/AccountPage";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
-  const { getUser, user } = baseStore.userStore;
+  const { getCurrentUser, user } = baseStore.userStore;
   const { setLoading, loading } = baseStore.commonStore;
 
   useEffect(() => {
     setLoading(true);
     if (window.localStorage.getItem("token")) {
-      getUser().finally(() => setLoading(false));
+      getCurrentUser().finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, [getUser, setLoading]);
+  }, [getCurrentUser, setLoading]);
 
   //TODO: make something better
-  if(isMobile){
-      return <Fragment>Use our app to use our website on mobile</Fragment>
+  if (isMobile) {
+    return <Fragment>Use our app to use our website on mobile</Fragment>;
   }
 
   if (loading) {
@@ -64,7 +65,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
 
   return (
     <Fragment>
-        <AddItemModal/>
+      <AddItemModal />
       <Route exact path="/" component={LoginForm} />
       {/* When we hit route with / and anything else this route will match */}
       <Route
@@ -77,7 +78,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
               <Switch>
                 {/* <ActivityDashboard /> */}
                 {/* Without exact when we go to /activities for react
-         both www.something.com/ and .com/activities match so bot will be rendered */}
+         both www.something.com/ and .com/activities match so both will be rendered */}
                 <Route exact path="/inventory" component={InventoryPage} />
                 {/* :id is a route parameter */}
                 {/* <Route path="/activities/:id" component={ActivityDetails} /> */}
@@ -87,8 +88,9 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={["/createActivity", "/manage/:id"]}
                   component={ActivityForm}
                 /> */}
-                <Route path="/login" component={LoginForm} />
-                <Route path="/register" component={RegisterForm} />
+                <Route path="/account" component={AccountPage} />
+                {/* <Route path="/login" component={LoginForm} />
+                <Route path="/register" component={RegisterForm} /> */}
                 {/* If route can't be found we will be redirected here */}
                 {/* <Route component={NotFound} /> */}
               </Switch>
