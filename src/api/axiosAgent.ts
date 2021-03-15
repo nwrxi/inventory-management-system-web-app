@@ -40,6 +40,11 @@ const axiosAgent = {
         .get(`account/`)
         .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
+    userAtId: (id: string): Promise<IUser> =>
+      axios
+        .get(`account/${id}`)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
   },
 
   Item: {
@@ -48,7 +53,8 @@ const axiosAgent = {
         .get(`items`)
         .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
-    addItem: (item: IFormItem): Promise<IItem> => axios
+    addItem: (item: IFormItem): Promise<IItem> =>
+      axios
         .post(`items`, item)
         .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),

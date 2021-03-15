@@ -12,6 +12,12 @@ export default class UserStore {
   }
 
   user: IUser | null = null;
+  selectedUser: IUser | null = null;
+  userLoading: boolean = false;
+
+  setUserLoading = (state: boolean) => {
+    this.userLoading = state;
+  };
 
   login = async (userToLogin: IUserFormValues) => {
     try {
@@ -47,6 +53,20 @@ export default class UserStore {
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  getUserAtId = async (id: string) => {
+    this.setUserLoading(true);
+    try {
+      const user = await axiosAgent.User.userAtId(Object.values(id)[0]);
+      runInAction(() => {
+        this.selectedUser = user;
+        this.setUserLoading(false);
+      });
+    } catch (error) {
+      this.setUserLoading(false);
+      throw error;
     }
   };
 

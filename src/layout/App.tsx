@@ -17,6 +17,7 @@ import Loading from "./Loading";
 import AddItemModal from "../features/items/AddItemModal";
 import { isMobile } from "react-device-detect";
 import AccountPage from "../features/user/AccountPage";
+import PublicAccountPage from "../features/user/PublicAccountPage";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
@@ -81,13 +82,19 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
          both www.something.com/ and .com/activities match so both will be rendered */}
                 <Route exact path="/inventory" component={InventoryPage} />
                 {/* :id is a route parameter */}
-                {/* <Route path="/activities/:id" component={ActivityDetails} /> */}
+                {/* <Route path="/account/:id" component={AccountPage} /> */}
                 {/* <Route
                   //Whenever key changes we will re-initialise this component
                   key={location.key}
                   path={["/createActivity", "/manage/:id"]}
                   component={ActivityForm}
                 /> */}
+                <Route
+                  path="/account/:id"
+                  component={(props: { match: { params: { id: string } } }) => (
+                    <PublicAccountPage id={props.match.params.id} />
+                  )}
+                />
                 <Route path="/account" component={AccountPage} />
                 {/* <Route path="/login" component={LoginForm} />
                 <Route path="/register" component={RegisterForm} /> */}

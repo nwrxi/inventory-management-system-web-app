@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import AccountPage from "../../features/user/AccountPage";
 import { BaseStoreContext } from "../../stores/BaseStore";
 
 export default observer(function NavBar() {
@@ -25,7 +26,7 @@ export default observer(function NavBar() {
           {/* <Nav.Link href="#link">Link</Nav.Link> */}
         </Nav>
         <NavDropdown alignRight title={user?.firstName} id="basic-nav-dropdown">
-          <LinkContainer to="/account">
+          <LinkContainer to={{ pathname: "/account", state: { id: user?.id } }}>
             <NavDropdown.Item>Account</NavDropdown.Item>
           </LinkContainer>
           <NavDropdown.Divider />
