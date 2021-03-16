@@ -1,6 +1,7 @@
 import MaterialTable from "material-table";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
+import { history } from "../../..";
 import { BaseStoreContext } from "../../../stores/BaseStore";
 
 export default observer(function InventoryTable() {
@@ -18,6 +19,19 @@ export default observer(function InventoryTable() {
         { title: "Added by", field: "addedBy" },
       ]}
       data={Array.from(itemsMap.values())}
+      actions={[
+        {
+          icon: "more_horiz",
+          tooltip: "Show Item Details",
+          onClick: (event, rowData) => alert(rowData.id),
+        },
+        {
+          icon: "account_circle",
+          tooltip: "Show User Details",
+          onClick: (event, rowData) =>
+            history.push(`account/${rowData.user.id}`),
+        },
+      ]}
 
       // detailPanel={(rowData) => {
       //   return (
