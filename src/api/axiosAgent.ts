@@ -24,7 +24,6 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
   new Promise<AxiosResponse>((resolve) =>
     setTimeout(() => resolve(response), ms)
   );
-
 const axiosAgent = {
   User: {
     login: (user: IUserFormValues): Promise<IUser> =>

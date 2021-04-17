@@ -4,7 +4,11 @@ import { useContext } from "react";
 import { history } from "../../..";
 import { BaseStoreContext } from "../../../stores/BaseStore";
 
-export default observer(function InventoryTable() {
+interface IProps {
+  searchData?: string;
+}
+
+export default observer(function InventoryTable({ searchData }: IProps) {
   const baseStore = useContext(BaseStoreContext);
   const { itemsMap, itemsLoading } = baseStore.itemStore;
 
@@ -23,16 +27,18 @@ export default observer(function InventoryTable() {
         {
           icon: "more_horiz",
           tooltip: "Show Item Details",
-          onClick: (event, rowData) => alert(rowData.id),
+          onClick: (event, rowData) => alert(rowData.user.id),
         },
         {
           icon: "account_circle",
           tooltip: "Show User Details",
           onClick: (event, rowData) =>
-            history.push(`account/${rowData.user.id}`),
+            history.push(`/account/${rowData.user.id}`),
         },
       ]}
-
+      options={{
+        searchText: searchData,
+      }}
       // detailPanel={(rowData) => {
       //   return (
       //     <iframe

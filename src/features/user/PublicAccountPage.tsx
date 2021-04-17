@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, CSSProperties, Fragment } from "react";
 import { Row, Col, Button, Image } from "react-bootstrap";
+import { history } from "../..";
 import Loading from "../../layout/Loading";
 import { BaseStoreContext } from "../../stores/BaseStore";
 
@@ -43,9 +44,25 @@ export default observer(function PublicAccountPage(id: any) {
                     <h4 className="mb-0 mt-0">
                       {selectedUser.firstName} {selectedUser.lastName}
                     </h4>
-                    <div>{selectedUser.email}</div>
                     <hr />
-                    <Button variant="outline-primary">
+                    <div>Email: {selectedUser.email}</div>
+                    <hr />
+                    <div>
+                      Role:
+                      {selectedUser.isAdmin === "True" && " Administrator"}
+                      {selectedUser.isAdmin === "False" && " User"}
+                    </div>
+                    <hr />
+                    <Button
+                      onClick={() =>
+                        history.push(
+                          `/inventory/${
+                            selectedUser.firstName + " " + selectedUser.lastName
+                          }`
+                        )
+                      }
+                      variant="outline-primary"
+                    >
                       Search for items added by user
                     </Button>
                   </div>

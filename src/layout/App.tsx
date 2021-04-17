@@ -80,7 +80,12 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 {/* <ActivityDashboard /> */}
                 {/* Without exact when we go to /activities for react
          both www.something.com/ and .com/activities match so both will be rendered */}
-                <Route exact path="/inventory" component={InventoryPage} />
+                <Route
+                  exact
+                  key={location.key}
+                  path="/inventory/:searchData?"
+                  component={InventoryPage}
+                />
                 {/* :id is a route parameter */}
                 {/* <Route path="/account/:id" component={AccountPage} /> */}
                 {/* <Route
@@ -90,12 +95,13 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   component={ActivityForm}
                 /> */}
                 <Route
+                  exact
                   path="/account/:id"
                   component={(props: { match: { params: { id: string } } }) => (
                     <PublicAccountPage id={props.match.params.id} />
                   )}
                 />
-                <Route path="/account" component={AccountPage} />
+                <Route exact path="/account" component={AccountPage} />
                 {/* <Route path="/login" component={LoginForm} />
                 <Route path="/register" component={RegisterForm} /> */}
                 {/* If route can't be found we will be redirected here */}

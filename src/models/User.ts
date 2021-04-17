@@ -5,6 +5,7 @@ export interface IUser {
   lastName: string;
   email: string;
   token: string;
+  isAdmin: string;
 }
 
 export interface IUserFormValues {

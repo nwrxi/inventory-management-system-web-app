@@ -1,9 +1,14 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
+import { RouteComponentProps } from "react-router";
 import { BaseStoreContext } from "../../../stores/BaseStore";
 import InventoryTable from "./InventoryTable";
 
-export default observer(function InventoryPage() {
+type TParams = { searchData: string };
+
+export default observer(function InventoryPage({
+  match,
+}: RouteComponentProps<TParams>) {
   const baseStore = useContext(BaseStoreContext);
   const { getItems, setItemsLoading } = baseStore.itemStore;
 
@@ -12,5 +17,5 @@ export default observer(function InventoryPage() {
     getItems().finally(() => setItemsLoading(false));
   }, [getItems, setItemsLoading]);
 
-  return <InventoryTable />;
+  return <InventoryTable searchData={match.params.searchData} />;
 });

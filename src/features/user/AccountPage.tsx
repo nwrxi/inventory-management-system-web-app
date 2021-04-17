@@ -1,8 +1,10 @@
 import { observer } from "mobx-react-lite";
 import { CSSProperties, Fragment, useContext, useEffect } from "react";
 import { Button, Col, Image, Row } from "react-bootstrap";
+import { history } from "../..";
 import Loading from "../../layout/Loading";
 import { BaseStoreContext } from "../../stores/BaseStore";
+import InventoryTable from "./Inventory/InventoryTable";
 
 export default observer(function AccountPage() {
   const baseStore = useContext(BaseStoreContext);
@@ -33,9 +35,23 @@ export default observer(function AccountPage() {
                     <h4 className="mb-0 mt-0">
                       {user.firstName} {user.lastName}
                     </h4>
-                    <div>{user.email}</div>
                     <hr />
-                    <Button variant="outline-primary">
+                    <div>Email: {user.email}</div>
+                    <hr />
+                    <div>
+                      Role:
+                      {user.isAdmin === "True" && " Administrator"}
+                      {user.isAdmin === "False" && " User"}
+                    </div>
+                    <hr />
+                    <Button
+                      onClick={() =>
+                        history.push(
+                          `/inventory/${user.firstName + " " + user.lastName}`
+                        )
+                      }
+                      variant="outline-primary"
+                    >
                       Search for items added by user
                     </Button>
                   </div>
