@@ -45,7 +45,7 @@ export default observer(function RegisterForm() {
       }}
       onSubmit={(values, { setStatus, setErrors, setSubmitting }) => {
         register(values).catch((error) => {
-          console.log(error.response.data.email);
+          console.log(error.response.data);
           if ("errors" in error.response.data) {
             setStatus({
               password: error.response.data.errors.Password,
@@ -57,6 +57,11 @@ export default observer(function RegisterForm() {
             });
           }
 
+          if ("username" in error.response.data) {
+            setStatus({
+              userName: error.response.data.username,
+            });
+          }
           setSubmitting(false);
         });
       }}
@@ -180,6 +185,9 @@ export default observer(function RegisterForm() {
                     </span>
                   )}
                 </div>
+                {status && status.userName && (
+                  <Alert variant="danger">{status.userName}</Alert>
+                )}
                 {status && status.email && (
                   <Alert variant="danger">{status.email}</Alert>
                 )}

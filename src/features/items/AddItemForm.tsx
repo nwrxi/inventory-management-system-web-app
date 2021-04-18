@@ -51,15 +51,13 @@ export default observer(function AddItemForm() {
         addItem(values)
           .then(() => setShow(false))
           .catch((error) => {
-            console.log(error.response.data);
-            if ("Barcode" in error.response.data.errors) {
-              setStatus({
-                barcode: error.response.data.errors.Barcode,
-              });
-            }
             if ("Barcode" in error.response.data) {
               setStatus({
                 barcode: error.response.data.Barcode,
+              });
+            } else if ("Barcode" in error.response.data.errors) {
+              setStatus({
+                barcode: error.response.data.errors.Barcode,
               });
             }
             setSubmitting(false);
