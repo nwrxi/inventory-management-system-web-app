@@ -18,6 +18,8 @@ import AddItemModal from "../features/items/AddItemModal";
 import { isMobile } from "react-device-detect";
 import AccountPage from "../features/user/AccountPage";
 import PublicAccountPage from "../features/user/PublicAccountPage";
+import NotFound from "./NotFound";
+import ServerError from "./ServerError";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
@@ -54,6 +56,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 <Switch>
                   <Route path="/login" component={LoginForm} />
                   <Route path="/register" component={RegisterForm} />
+                  <Route exact path="/ServerError" component={ServerError} />
                   <Route component={LoginForm} />
                 </Switch>
               </Container>
@@ -105,7 +108,8 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 {/* <Route path="/login" component={LoginForm} />
                 <Route path="/register" component={RegisterForm} /> */}
                 {/* If route can't be found we will be redirected here */}
-                {/* <Route component={NotFound} /> */}
+                <Route exact path="/ServerError" component={ServerError} />
+                <Route component={NotFound} />
               </Switch>
             </Container>
           </Fragment>

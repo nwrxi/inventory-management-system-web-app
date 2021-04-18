@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { history } from "..";
 import { IFormItem, IItem } from "../models/Item";
 import { IUser, IUserFormValues } from "../models/User";
 
@@ -16,6 +17,23 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(undefined, (error) => {
+  if (error.message === "Network Error" && !error.response) {
+    history.push("/ServerError");
+  }
+  const { status, data, config } = error.response;
+  if (status === 404) {
+    history.push("/NotFound");
+  }
+  if (
+    status === 400 &&
+    config.method === "get" &&
+    data.errors.hasOwnProperty("id")
+  ) {
+    history.push("/NotFound");
+  }
+  if (status === 500) {
+    history.push("/ServerError");
+  }
   throw error;
 });
 
