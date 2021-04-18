@@ -92,9 +92,11 @@ export default observer(function RegisterForm() {
     >
       {({
         handleSubmit,
+        setFieldValue,
         touched,
         isSubmitting,
         errors,
+        setStatus,
         isValid,
         dirty,
         status,
@@ -114,6 +116,15 @@ export default observer(function RegisterForm() {
                     name="userName"
                     className={"form-control"}
                     placeholder="Username"
+                    onChange={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("userName", value);
+                      setStatus({
+                        email: status.email,
+                        password: status.password,
+                        userName: "",
+                      });
+                    }}
                   />
                   {touched.userName && errors.userName && (
                     <span className="help-block text-danger">
@@ -162,6 +173,15 @@ export default observer(function RegisterForm() {
                     name="email"
                     className={"form-control"}
                     placeholder="Email"
+                    onChange={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("email", value);
+                      setStatus({
+                        userName: status.userName,
+                        password: status.password,
+                        email: "",
+                      });
+                    }}
                   />
                   {touched.email && errors.email && (
                     <span className="help-block text-danger">
@@ -178,6 +198,15 @@ export default observer(function RegisterForm() {
                     name="password"
                     className={"form-control"}
                     placeholder="Password"
+                    onChange={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("password", value);
+                      setStatus({
+                        email: status.email,
+                        userName: status.userName,
+                        password: "",
+                      });
+                    }}
                   />
                   {touched.password && errors.password && (
                     <span className="help-block text-danger">

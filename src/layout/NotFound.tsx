@@ -1,4 +1,3 @@
-import { CSSProperties } from "@material-ui/styles";
 import { observer } from "mobx-react-lite";
 import { Fragment } from "react";
 
