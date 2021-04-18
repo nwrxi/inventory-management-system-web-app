@@ -1,12 +1,11 @@
 import { Field, Form, Formik } from "formik";
-import React, { CSSProperties, Fragment, useContext } from "react";
+import { CSSProperties, Fragment, useContext } from "react";
 import { Alert, Button, Spinner } from "react-bootstrap";
 import * as Yup from "yup";
-import { LinkContainer } from "react-router-bootstrap";
 import { BaseStoreContext } from "../../stores/BaseStore";
 import { observer } from "mobx-react-lite";
 import { isMobile } from "react-device-detect";
-import { AxiosResponse } from "axios";
+import { isValid } from "gtin";
 
 let loginPageStyle: CSSProperties = {
   position: "absolute",
@@ -39,6 +38,17 @@ export default observer(function AddItemForm() {
   const { setShow } = baseStore.modalStore;
   const { addItem } = baseStore.itemStore;
 
+  Yup.addMethod(Yup.number, "validateBarcode", function (errorMessage) {
+    return this.test(`test-barcode`, errorMessage, function (value) {
+      const { path, createError } = this;
+
+      return (
+        isValid(value!.toString()) ||
+        createError({ path, message: errorMessage })
+      );
+    });
+  });
+
   return (
     <Formik
       initialValues={{
@@ -47,7 +57,7 @@ export default observer(function AddItemForm() {
         dateAdded: new Date().toJSON(),
         error: null,
       }}
-      onSubmit={(values, { setStatus, setErrors, setSubmitting }) => {
+      onSubmit={(values, { setStatus, setSubmitting }) => {
         addItem(values)
           .then(() => setShow(false))
           .catch((error) => {
@@ -65,13 +75,22 @@ export default observer(function AddItemForm() {
       }}
       validationSchema={Yup.object({
         name: Yup.string().required("Item name is required"),
-        barcode: Yup.number().required("Barcode is required"),
+        barcode: Yup.number()
+          .test(
+            "is-barcode",
+            "Invalid barcode",
+            (value, context) =>
+              value === undefined || isValid(value!.toString()) === true
+          )
+          .required("Barcode is required"),
       })}
     >
       {({
         setFieldValue,
         handleSubmit,
         touched,
+        setStatus,
+        setErrors,
         isSubmitting,
         errors,
         isValid,
@@ -113,6 +132,9 @@ export default observer(function AddItemForm() {
                       const regex = /^[0-9]*$/;
                       if (regex.test(value.toString())) {
                         setFieldValue("barcode", value);
+                        setStatus({
+                          barcode: "",
+                        });
                       }
                     }}
                     className={"form-control"}
