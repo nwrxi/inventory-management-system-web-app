@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import axiosAgent from "../api/axiosAgent";
 import { BaseStore } from "./BaseStore";
-import { IFormItem } from "../models/Item";
+import { IFormItem, IItem } from "../models/Item";
 
 export default class ItemStore {
   baseStore: BaseStore;
@@ -11,11 +11,32 @@ export default class ItemStore {
     this.baseStore = baseStore;
   }
 
+  selectedItem: IItem | null = null;
+
   itemsMap = new Map();
   itemsLoading: boolean = true;
+  itemLoading: boolean = true;
 
   setItemsLoading = (loading: boolean) => {
     this.itemsLoading = loading;
+  };
+
+  setItemLoading = (loading: boolean) => {
+    this.itemLoading = loading;
+  };
+
+  getItem = async (id: string) => {
+    this.setItemLoading(true);
+    try {
+      const item = await axiosAgent.Item.getItem(Object.values(id)[0]);
+      runInAction(() => {
+        this.selectedItem = item;
+        this.setItemLoading(false);
+      });
+    } catch (error) {
+      this.setItemLoading(false);
+      throw error;
+    }
   };
 
   getItems = async () => {

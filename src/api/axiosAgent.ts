@@ -70,6 +70,11 @@ const axiosAgent = {
         .get(`items`)
         .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
+    getItem: (id: string): Promise<IItem> =>
+      axios
+        .get(`items/${id}`)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
     addItem: (item: IFormItem): Promise<IItem> =>
       axios
         .post(`items`, item)

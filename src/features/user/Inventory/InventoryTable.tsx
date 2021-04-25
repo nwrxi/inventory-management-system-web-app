@@ -27,7 +27,7 @@ export default observer(function InventoryTable({ searchData }: IProps) {
         {
           icon: "more_horiz",
           tooltip: "Show Item Details",
-          onClick: (event, rowData) => alert(rowData.user.id),
+          onClick: (event, rowData) => history.push(`/item/${rowData.id}`),
         },
         {
           icon: "account_circle",

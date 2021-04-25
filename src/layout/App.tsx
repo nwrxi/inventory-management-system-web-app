@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect } from "react";
 import "./App.css";
 import LoginForm from "../features/user/LoginForm";
 import {
+  Redirect,
   Route,
   RouteComponentProps,
   Switch,
@@ -20,6 +21,7 @@ import AccountPage from "../features/user/AccountPage";
 import PublicAccountPage from "../features/user/PublicAccountPage";
 import NotFound from "./NotFound";
 import ServerError from "./ServerError";
+import ItemPage from "../features/items/ItemPage";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
@@ -70,7 +72,9 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
     <Fragment>
       <AddItemModal />
-      <Route exact path="/" component={LoginForm} />
+      <Route exact path="/">
+        <Redirect to="/inventory" />
+      </Route>
       {/* When we hit route with / and anything else this route will match */}
       <Route
         path={"/(.+)"}
@@ -97,6 +101,13 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={["/createActivity", "/manage/:id"]}
                   component={ActivityForm}
                 /> */}
+                <Route
+                  exact
+                  path="/item/:id"
+                  component={(props: { match: { params: { id: string } } }) => (
+                    <ItemPage id={props.match.params.id} />
+                  )}
+                />
                 <Route
                   exact
                   path="/account/:id"
