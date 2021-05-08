@@ -30,6 +30,8 @@ export default class ItemStore {
     try {
       const item = await axiosAgent.Item.getItem(Object.values(id)[0]);
       runInAction(() => {
+        item.dateAdded = new Date(item.dateAdded);
+        item.addedBy = item.user.firstName + " " + item.user.lastName;
         this.selectedItem = item;
         this.setItemLoading(false);
       });
