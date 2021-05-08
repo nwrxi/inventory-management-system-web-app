@@ -1,6 +1,8 @@
+import { Card } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, CSSProperties, Fragment } from "react";
 import { Row, Col, Button, Image } from "react-bootstrap";
+import { isMobile } from "react-device-detect";
 import { history } from "../..";
 import Loading from "../../layout/Loading";
 import { BaseStoreContext } from "../../stores/BaseStore";
@@ -21,22 +23,49 @@ export default observer(function PublicAccountPage(id: any) {
     width: "55vh",
   };
 
+  const btnStyle: CSSProperties = {
+    width: "50%",
+    height: "50%",
+    margin: "0",
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
+    msTransform: "translateY(-50%)",
+  };
+
   if (userLoading) return <Loading />;
 
   return (
     <Fragment>
       {selectedUser && (
         <div className="container d-flex justify-content-center">
-          <div style={style} className="card p-5">
+          <Card style={style} className="p-5 w-75">
             <Row>
               <Col xs={7} md={5}>
-                <div className="image">
+                {!isMobile && (
+                  <div className="d-flex justify-content-center align-items-center">
+                    <Button
+                      style={btnStyle}
+                      onClick={() =>
+                        history.push(
+                          `/inventory/${
+                            selectedUser.firstName + " " + selectedUser.lastName
+                          }`
+                        )
+                      }
+                      variant="outline-primary"
+                    >
+                      Search for items added by user
+                    </Button>
+                  </div>
+                )}
+                {/* <div className="image">
                   <Image
                     src="https://react-bootstrap-v3.netlify.app/thumbnail.png"
                     rounded
                     fluid
                   />
-                </div>
+                </div> */}
               </Col>
               <Col xs={6} md={5}>
                 <div className="align-items-center">
@@ -53,23 +82,27 @@ export default observer(function PublicAccountPage(id: any) {
                       {selectedUser.isAdmin === "False" && " User"}
                     </div>
                     <hr />
-                    <Button
-                      onClick={() =>
-                        history.push(
-                          `/inventory/${
-                            selectedUser.firstName + " " + selectedUser.lastName
-                          }`
-                        )
-                      }
-                      variant="outline-primary"
-                    >
-                      Search for items added by user
-                    </Button>
+                    {isMobile && (
+                      <Button
+                        onClick={() =>
+                          history.push(
+                            `/inventory/${
+                              selectedUser.firstName +
+                              " " +
+                              selectedUser.lastName
+                            }`
+                          )
+                        }
+                        variant="outline-primary"
+                      >
+                        Search for items added by user
+                      </Button>
+                    )}
                   </div>
                 </div>
               </Col>
             </Row>
-          </div>
+          </Card>
         </div>
       )}
     </Fragment>
