@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
-import React, { useContext, useEffect, CSSProperties, Fragment } from "react";
-import { Row, Col, Button, Image, Card } from "react-bootstrap";
+import { useContext, useEffect, CSSProperties, Fragment } from "react";
+import { Row, Col, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { history } from "../..";
 import Loading from "../../layout/Loading";
@@ -8,8 +8,14 @@ import { BaseStoreContext } from "../../stores/BaseStore";
 
 export default observer(function ItemPage(id: any) {
   const baseStore = useContext(BaseStoreContext);
-  const { getItem, selectedItem, itemLoading } = baseStore.itemStore;
+  const {
+    getItem,
+    deleteItem,
+    selectedItem,
+    itemLoading,
+  } = baseStore.itemStore;
   const { user } = baseStore.userStore;
+  const { setEditShow } = baseStore.modalStore;
 
   useEffect(() => {
     try {
@@ -58,14 +64,17 @@ export default observer(function ItemPage(id: any) {
                       user!.isAdmin === "True") && (
                       <div>
                         <Button
-                          onClick={() => console.log("Edit")}
+                          onClick={() => setEditShow(true)}
                           variant="primary"
                         >
                           Edit
                         </Button>
                         <Button
                           style={{ margin: "0 0 0 2vh" }}
-                          onClick={() => console.log("Delete")}
+                          onClick={() => {
+                            deleteItem(selectedItem.id);
+                            history.push(`/inventory`);
+                          }}
                           variant="danger"
                         >
                           Delete

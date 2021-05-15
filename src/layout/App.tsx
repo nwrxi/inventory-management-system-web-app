@@ -22,6 +22,7 @@ import PublicAccountPage from "../features/user/PublicAccountPage";
 import NotFound from "./NotFound";
 import ServerError from "./ServerError";
 import ItemPage from "../features/items/ItemPage";
+import EditItemModal from "../features/items/EditItemModal";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
@@ -72,6 +73,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
     <Fragment>
       <AddItemModal />
+      <EditItemModal />
       <Route exact path="/">
         <Redirect to="/inventory" />
       </Route>

@@ -53,7 +53,7 @@ export default class ItemStore {
       });
     } catch (error) {
       this.baseStore.commonStore.setLoading(false);
-      console.log(error);
+      throw error;
     }
   };
 
@@ -65,6 +65,29 @@ export default class ItemStore {
         addedItem.addedBy =
           addedItem.user.firstName + " " + addedItem.user.lastName;
         this.itemsMap.set(addedItem.id, addedItem);
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  editItem = async (item: IItem) => {
+    try {
+      await axiosAgent.Item.editItem(item);
+      runInAction(() => {
+        this.itemsMap.set(item.id, item);
+        this.selectedItem = item;
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  deleteItem = async (id: string) => {
+    try {
+      const deletedItem = await axiosAgent.Item.deleteItem(id);
+      runInAction(() => {
+        this.itemsMap.delete(deletedItem.id);
       });
     } catch (error) {
       throw error;

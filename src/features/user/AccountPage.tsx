@@ -1,12 +1,10 @@
 import { Card } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import { CSSProperties, Fragment, useContext, useEffect } from "react";
-import { Button, Col, Image, Row } from "react-bootstrap";
+import { CSSProperties, Fragment, useContext } from "react";
+import { Button, Col, Row } from "react-bootstrap";
 import { isMobile } from "react-device-detect";
 import { history } from "../..";
-import Loading from "../../layout/Loading";
 import { BaseStoreContext } from "../../stores/BaseStore";
-import InventoryTable from "./Inventory/InventoryTable";
 
 export default observer(function AccountPage() {
   const baseStore = useContext(BaseStoreContext);

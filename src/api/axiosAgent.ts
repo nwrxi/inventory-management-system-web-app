@@ -80,6 +80,16 @@ const axiosAgent = {
         .post(`items`, item)
         .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
+    deleteItem: (id: string): Promise<IItem> =>
+      axios
+        .delete(`items/${id}`)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
+    editItem: (item: IItem) =>
+      axios
+        .put(`items/${item.id}`, item)
+        .then(sleep(1000))
+        .then((response: AxiosResponse) => response.data),
   },
 };
 

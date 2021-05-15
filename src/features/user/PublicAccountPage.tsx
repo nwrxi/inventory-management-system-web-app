@@ -1,7 +1,7 @@
 import { Card } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import React, { useContext, useEffect, CSSProperties, Fragment } from "react";
-import { Row, Col, Button, Image } from "react-bootstrap";
+import { useContext, useEffect, CSSProperties, Fragment } from "react";
+import { Row, Col, Button } from "react-bootstrap";
 import { isMobile } from "react-device-detect";
 import { history } from "../..";
 import Loading from "../../layout/Loading";
