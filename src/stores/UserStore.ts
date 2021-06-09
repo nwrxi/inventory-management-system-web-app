@@ -34,11 +34,18 @@ export default class UserStore {
 
   register = async (userToRegister: IUserFormValues) => {
     try {
-      const user = await axiosAgent.User.register(userToRegister);
-      if (user) {
-        runInAction(() => (this.user = user));
-        window.localStorage.setItem("token", user.token);
+      let user: IUser;
+      if (this.user && this.user.isAdmin === "True") {
+        user = await axiosAgent.User.registerAdmin(userToRegister);
+        console.log(user);
         history.push("/inventory");
+      } else {
+        user = await axiosAgent.User.register(userToRegister);
+        if (user) {
+          runInAction(() => (this.user = user));
+          window.localStorage.setItem("token", user.token);
+          history.push("/inventory");
+        }
       }
     } catch (error) {
       throw error;

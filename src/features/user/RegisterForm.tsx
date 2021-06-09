@@ -31,7 +31,7 @@ export type FormikErrors<Values> = {
 
 export default observer(function RegisterForm() {
   const baseStore = useContext(BaseStoreContext);
-  const { register } = baseStore.userStore;
+  const { register, user } = baseStore.userStore;
 
   return (
     <Formik
@@ -105,7 +105,9 @@ export default observer(function RegisterForm() {
           <div className="container">
             <div className="login-wrapper" style={loginPageStyle}>
               <h2>Inventory Management System</h2>
-              <h3>Register Page</h3>
+              {(user && user.isAdmin === "True" && (
+                <h3>Register Admin Page</h3>
+              )) ?? <h3>Register Page</h3>}
               <Form className="form-container">
                 <div className="form-group">
                   <label style={labelStyle} htmlFor="userName">
@@ -117,13 +119,14 @@ export default observer(function RegisterForm() {
                     className={"form-control"}
                     placeholder="Username"
                     onChange={(e: any) => {
+                      console.log(status);
                       const { value } = e.target;
                       setFieldValue("userName", value);
-                      setStatus({
-                        email: status.email,
-                        password: status.password,
-                        userName: "",
-                      });
+                      // setStatus({
+                      //   email: status!.email,
+                      //   password: status!.password,
+                      //   userName: "",
+                      // });
                     }}
                   />
                   {touched.userName && errors.userName && (
@@ -176,11 +179,11 @@ export default observer(function RegisterForm() {
                     onChange={(e: any) => {
                       const { value } = e.target;
                       setFieldValue("email", value);
-                      setStatus({
-                        userName: status.userName,
-                        password: status.password,
-                        email: "",
-                      });
+                      // setStatus({
+                      //   userName: status.userName,
+                      //   password: status.password,
+                      //   email: "",
+                      // });
                     }}
                   />
                   {touched.email && errors.email && (
@@ -201,11 +204,11 @@ export default observer(function RegisterForm() {
                     onChange={(e: any) => {
                       const { value } = e.target;
                       setFieldValue("password", value);
-                      setStatus({
-                        email: status.email,
-                        userName: status.userName,
-                        password: "",
-                      });
+                      // setStatus({
+                      //   email: status.email,
+                      //   userName: status.userName,
+                      //   password: "",
+                      // });
                     }}
                   />
                   {touched.password && errors.password && (

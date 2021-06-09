@@ -52,6 +52,10 @@ const axiosAgent = {
       axios
         .post(`account/register`, user)
         .then((response: AxiosResponse) => response.data),
+    registerAdmin: (user: IUserFormValues): Promise<IUser> =>
+      axios
+        .post(`account/registerAdmin`, user)
+        .then((response: AxiosResponse) => response.data),
     currentUser: (): Promise<IUser> =>
       axios
         .get(`account/`)

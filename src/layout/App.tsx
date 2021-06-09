@@ -89,6 +89,9 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 {/* <ActivityDashboard /> */}
                 {/* Without exact when we go to /activities for react
          both www.something.com/ and .com/activities match so both will be rendered */}
+                {user.isAdmin && user.isAdmin === "True" && (
+                  <Route exact path="/register" component={RegisterForm} />
+                )}
                 <Route
                   exact
                   key={location.key}

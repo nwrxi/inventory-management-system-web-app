@@ -22,6 +22,14 @@ export default observer(function NavBar() {
               Add Item
             </Button>
           </LinkContainer>
+          {user && user.isAdmin === "True" && (
+            <LinkContainer to="/register">
+              <Button className="ml-1" variant="primary">
+                Create admin account
+              </Button>
+            </LinkContainer>
+          )}
+
           {/* <Nav.Link href="#link">Link</Nav.Link> */}
         </Nav>
         <NavDropdown alignRight title={user?.firstName} id="basic-nav-dropdown">
