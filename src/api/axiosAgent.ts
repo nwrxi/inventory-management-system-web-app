@@ -20,9 +20,18 @@ axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response) {
     history.push("/ServerError");
   }
-  const { status, data, config } = error.response;
+  const { status, data, config, headers } = error.response;
   if (status === 404) {
     history.push("/NotFound");
+  }
+  if (
+    status === 401 &&
+    headers["www-authenticate"].includes(
+      'Bearer error="invalid_token", error_description="The token expired at'
+    )
+  ) {
+    window.localStorage.removeItem("token");
+    history.push("/login");
   }
   if (
     status === 400 &&

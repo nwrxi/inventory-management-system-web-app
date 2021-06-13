@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
 import { RouteComponentProps } from "react-router";
+import { history } from "../../..";
 import { BaseStoreContext } from "../../../stores/BaseStore";
 import InventoryTable from "./InventoryTable";
 

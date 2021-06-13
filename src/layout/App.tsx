@@ -26,7 +26,7 @@ import EditItemModal from "../features/items/EditItemModal";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
-  const { getCurrentUser, user } = baseStore.userStore;
+  const { getCurrentUser, user, logout } = baseStore.userStore;
   const { setLoading, loading } = baseStore.commonStore;
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
     return <Loading />;
   }
 
-  if (!user) {
+  if (!user || !window.localStorage.getItem("token")) {
     return (
       <Fragment>
         <Route exact path="/" component={LoginForm} />

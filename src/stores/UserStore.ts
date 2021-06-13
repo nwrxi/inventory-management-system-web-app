@@ -77,6 +77,10 @@ export default class UserStore {
     }
   };
 
+  removeActiveUser = () => {
+    this.user = null;
+  };
+
   logout = () => {
     this.user = null;
     window.localStorage.removeItem("token");
