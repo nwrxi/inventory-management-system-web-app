@@ -26,7 +26,7 @@ import EditItemModal from "../features/items/EditItemModal";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const baseStore = useContext(BaseStoreContext);
-  const { getCurrentUser, user, logout } = baseStore.userStore;
+  const { getCurrentUser, user } = baseStore.userStore;
   const { setLoading, loading } = baseStore.commonStore;
 
   useEffect(() => {
