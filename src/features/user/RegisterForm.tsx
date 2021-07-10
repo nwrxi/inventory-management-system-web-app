@@ -1,5 +1,5 @@
 import { Form, Field, Formik } from "formik";
-import React, { CSSProperties, Fragment, useContext } from "react";
+import { CSSProperties, Fragment, useContext } from "react";
 import { Alert, Button, Spinner } from "react-bootstrap";
 import * as Yup from "yup";
 import { LinkContainer } from "react-router-bootstrap";
@@ -247,11 +247,19 @@ export default observer(function RegisterForm() {
                     Register
                   </Button>
                 )}
-                <LinkContainer to="/login">
-                  <Button className="ml-2" variant="danger">
-                    Go back to login
-                  </Button>
-                </LinkContainer>
+                {(user && user.isAdmin === "True" && (
+                  <LinkContainer to="/inventory">
+                    <Button className="ml-2" variant="danger">
+                      Go back to inventory
+                    </Button>
+                  </LinkContainer>
+                )) ?? (
+                  <LinkContainer to="/login">
+                    <Button className="ml-2" variant="danger">
+                      Go back to login
+                    </Button>
+                  </LinkContainer>
+                )}
               </Form>
             </div>
           </div>
