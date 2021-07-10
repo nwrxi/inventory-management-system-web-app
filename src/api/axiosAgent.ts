@@ -46,11 +46,6 @@ axios.interceptors.response.use(undefined, (error) => {
   throw error;
 });
 
-//TODO: delete later - only for development
-const sleep = (ms: number) => (response: AxiosResponse) =>
-  new Promise<AxiosResponse>((resolve) =>
-    setTimeout(() => resolve(response), ms)
-  );
 const axiosAgent = {
   User: {
     login: (user: IUserFormValues): Promise<IUser> =>
@@ -66,42 +61,29 @@ const axiosAgent = {
         .post(`account/registerAdmin`, user)
         .then((response: AxiosResponse) => response.data),
     currentUser: (): Promise<IUser> =>
-      axios
-        .get(`account/`)
-        .then(sleep(1000))
-        .then((response: AxiosResponse) => response.data),
+      axios.get(`account/`).then((response: AxiosResponse) => response.data),
     userAtId: (id: string): Promise<IUser> =>
       axios
         .get(`account/${id}`)
-        .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
   },
 
   Item: {
     getItems: (): Promise<IItem[]> =>
-      axios
-        .get(`items`)
-        .then(sleep(1000))
-        .then((response: AxiosResponse) => response.data),
+      axios.get(`items`).then((response: AxiosResponse) => response.data),
     getItem: (id: string): Promise<IItem> =>
-      axios
-        .get(`items/${id}`)
-        .then(sleep(1000))
-        .then((response: AxiosResponse) => response.data),
+      axios.get(`items/${id}`).then((response: AxiosResponse) => response.data),
     addItem: (item: IFormItem): Promise<IItem> =>
       axios
         .post(`items`, item)
-        .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
     deleteItem: (id: string): Promise<IItem> =>
       axios
         .delete(`items/${id}`)
-        .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
     editItem: (item: IItem) =>
       axios
         .put(`items/${item.id}`, item)
-        .then(sleep(1000))
         .then((response: AxiosResponse) => response.data),
   },
 };
