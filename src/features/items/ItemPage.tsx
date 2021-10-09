@@ -43,6 +43,10 @@ export default observer(function ItemPage(id: any) {
                     <h4 className="mb-0 mt-0">
                       Item name: {selectedItem.name}
                     </h4>
+                    
+                    {selectedItem.description &&
+                    <div> <hr /> Description: {selectedItem.description}</div>
+                    }
                     <hr />
                     <div>Barcode: {selectedItem.barcode}</div>
                     <hr />

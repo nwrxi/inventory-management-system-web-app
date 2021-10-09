@@ -54,6 +54,7 @@ export default observer(function EditItemForm() {
       initialValues={{
         id: selectedItem!.id,
         name: selectedItem!.name,
+        description: selectedItem!.description,
         barcode: selectedItem!.barcode,
         dateAdded: selectedItem!.dateAdded,
         addedBy: selectedItem!.addedBy,
@@ -114,10 +115,34 @@ export default observer(function EditItemForm() {
                     name="name"
                     className={"form-control"}
                     placeholder="Item name"
+                    onBlur={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("name", value.trim());
+                    }}
                   />
                   {touched.name && errors.name && (
                     <span className="help-block text-danger">
                       {errors.name}
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label style={labelStyle} htmlFor="description">
+                    Item description
+                  </label>
+                  <Field
+                    type="text"
+                    name="description"
+                    className={"form-control"}
+                    placeholder="Item description"
+                    onBlur={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("description", value.trim());
+                    }}
+                  />
+                  {touched.name && errors.name && (
+                    <span className="help-block text-danger">
+                      {errors.description}
                     </span>
                   )}
                 </div>
@@ -158,7 +183,7 @@ export default observer(function EditItemForm() {
                     variant="primary"
                     type="submit"
                   >
-                    Add
+                    Submit
                   </Button>
                 )}
                 {isSubmitting && (

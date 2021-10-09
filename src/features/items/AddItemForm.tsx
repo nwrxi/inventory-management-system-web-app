@@ -53,6 +53,7 @@ export default observer(function AddItemForm() {
     <Formik
       initialValues={{
         name: "",
+        description: "",
         barcode: "",
         dateAdded: new Date().toJSON(),
         error: null,
@@ -111,10 +112,34 @@ export default observer(function AddItemForm() {
                     name="name"
                     className={"form-control"}
                     placeholder="Item name"
+                    onBlur={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("name", value.trim());
+                    }}
                   />
                   {touched.name && errors.name && (
                     <span className="help-block text-danger">
                       {errors.name}
+                    </span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <label style={labelStyle} htmlFor="description">
+                    Item description
+                  </label>
+                  <Field
+                    type="text"
+                    name="description"
+                    className={"form-control"}
+                    placeholder="Item description"
+                    onBlur={(e: any) => {
+                      const { value } = e.target;
+                      setFieldValue("description", value.trim());
+                    }}
+                  />
+                  {touched.name && errors.name && (
+                    <span className="help-block text-danger">
+                      {errors.description}
                     </span>
                   )}
                 </div>
